@@ -215,5 +215,22 @@ describe('PatientService', () => {
       await sut.update(mockPatient as any)
       expect(findByIdSpy).toHaveBeenCalledWith(mockPatient)
     })
+
+    test('should throw if PatientRepository throws', async () => {
+      const mockPatient = {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_last_name',
+        birthDate: new Date(2022, 10, 20),
+        disease: 'any_disease'
+      }
+
+      const { sut, patientRepositoryStub } = makeSut()
+
+      jest.spyOn(patientRepositoryStub, 'findById').mockImplementation(() => { throw new Error() })
+
+      const result = sut.update(mockPatient)
+      expect(result).rejects.toThrow(new Error())
+    })
   })
 })
