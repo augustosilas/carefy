@@ -285,4 +285,19 @@ describe('PatientService', () => {
       expect(result).rejects.toThrow(new Error())
     })
   })
+
+  describe('FindAllPatients', () => {
+    test('should call patientRepository.findAll with correct values', async () => {
+      const params = {
+        page: 0,
+        limit: 10
+      }
+
+      const { sut, patientRepositoryStub } = makeSut()
+      const findAllSpy = jest.spyOn(patientRepositoryStub, 'findAll')
+
+      await sut.findAll(params)
+      expect(findAllSpy).toHaveBeenCalledWith(params)
+    })
+  })
 })
