@@ -12,6 +12,10 @@ export class PatientServices implements IPatientServices {
       if (!requiredFields.includes(key)) throw new AppError(`missing field: ${key}`)
     })
 
+    if (patient.birthDate && new Date(patient.birthDate) > new Date()) {
+      throw new AppError('birthdate cannot be greater than the current date')
+    }
+
     await this.patientRepository.create(patient)
   }
 
