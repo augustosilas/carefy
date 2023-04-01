@@ -31,7 +31,6 @@ describe('PatientService', () => {
     }
   }
 
-
   describe('CreatePatient', () => {
     test('should throw if name is not provided', async () => {
       const mockPatientWithoutName = {
@@ -129,6 +128,23 @@ describe('PatientService', () => {
 
       const result = sut.create(mockPatient)
       expect(result).rejects.toThrow(new Error())
+    })
+  })
+
+  describe('UdpatePatient', () => {
+    test('should throw if patient id is not provided', async () => {
+      const mockPatient = {
+        id: '',
+        name: 'any_name',
+        lastName: 'any_last_name',
+        birthDate: new Date(2022, 5, 3),
+        disease: 'any_disease'
+      }
+
+      const { sut } = makeSut()
+
+      const promise = sut.update(mockPatient as any)
+      expect(promise).rejects.toEqual(new AppError('missing field: id'))
     })
   })
 })
