@@ -1,11 +1,11 @@
 import { AppError } from "../app-error";
 import { IPatientRepository } from "../infra/patient-repository.interface";
-import { IPatientServices, Patient, UpdatePatient } from "./patient-interface";
+import { CreatePatient, FindAllParams, IPatientServices, Patient, UpdatePatient } from "./patient-interface";
 
 export class PatientServices implements IPatientServices {
   constructor(private readonly patientRepository: IPatientRepository) { }
 
-  async create(patient: Patient): Promise<void> {
+  async create(patient: CreatePatient): Promise<void> {
     const requiredFields = ['name', 'lastName', 'birthDate', 'disease']
 
     Object.keys(patient).forEach(key => {
@@ -39,6 +39,10 @@ export class PatientServices implements IPatientServices {
     if (!patient) throw new AppError('patient not found', 404)
 
     await this.patientRepository.delete(id)
+  }
+
+  async findAll(params: FindAllParams): Promise<Patient[]> {
+    return await this.patientRepository.findAll(params)
   }
 
 }
