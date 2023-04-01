@@ -253,5 +253,15 @@ describe('PatientService', () => {
       await sut.delete(id)
       expect(findByIdSpy).toHaveBeenCalledWith('any_id')
     })
+
+    test('should throw if patient is not found', async () => {
+      const id = 'invalid_id'
+
+      const { sut, patientRepositoryStub } = makeSut()
+      jest.spyOn(patientRepositoryStub, 'findById').mockReturnValue(Promise.resolve(undefined))
+
+      const promise = sut.delete(id)
+      await expect(promise).rejects.toEqual(new AppError('patient not found', 404))
+    })
   })
 })
