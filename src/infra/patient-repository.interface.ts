@@ -25,4 +25,5 @@ export interface IPatientRepository {
   create: (patient: CreatePatient) => Promise<void>
   update: (patient: UpdatePatient) => Promise<void>
   findById: (id: string) => Promise<Patient | undefined>
+  delete: (id: string) => Promise<void>
 }

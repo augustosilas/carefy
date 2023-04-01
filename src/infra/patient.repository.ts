@@ -18,4 +18,8 @@ export class PatientRepository implements IPatientRepository {
         select: ['id', 'name', 'lastName', 'birthDate', 'disease']
       })
   }
+
+  async delete(id: string): Promise<void> {
+    await getRepository(PgPatient).delete(id)
+  }
 }
