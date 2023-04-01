@@ -1,4 +1,20 @@
+export type CreatePatient = {
+  name: string
+  lastName: string
+  disease: string
+  birthDate: Date
+}
+
+export type UpdatePatient = {
+  id: string
+  name?: string
+  lastName?: string
+  disease?: string
+  birthDate?: Date
+}
+
 export type Patient = {
+  id: string
   name: string
   lastName: string
   disease: string
@@ -6,5 +22,7 @@ export type Patient = {
 }
 
 export interface IPatientRepository {
-  create: (patient: Patient) => Promise<void>
+  create: (patient: CreatePatient) => Promise<void>
+  update: (patient: UpdatePatient) => Promise<void>
+  findById: (id: string) => Promise<Patient | undefined>
 }
