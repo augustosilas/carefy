@@ -87,5 +87,22 @@ describe('PatientService', () => {
       const promise = sut.create(mockPatient)
       await expect(promise).rejects.toEqual(new AppError('birthdate cannot be greater than the current date'))
     })
+
+    test('should call PatientRepository with correct values', async () => {
+      const mockPatient = {
+        name: 'any_name',
+        lastName: 'any_last_name',
+        birthDate: new Date(2022, 10, 20),
+        disease: 'any_disease'
+      }
+
+      const patientRepositoryStub = new PatientRepositoryStub()
+      const sut = new PatientServices(patientRepositoryStub)
+
+      const createSpy = jest.spyOn(patientRepositoryStub, 'create')
+
+      await sut.create(mockPatient)
+      expect(createSpy).toHaveBeenCalledWith(mockPatient)
+    })
   })
 })
