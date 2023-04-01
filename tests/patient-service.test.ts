@@ -332,5 +332,19 @@ describe('PatientService', () => {
       const result = await sut.findAll(params)
       expect(result).toEqual(mockPatients())
     })
+
+    test('should throw if PatientRepository throws', async () => {
+      const params = {
+        page: 0,
+        limit: 10
+      }
+
+      const { sut, patientRepositoryStub } = makeSut()
+
+      jest.spyOn(patientRepositoryStub, 'findAll').mockImplementation(() => { throw new Error() })
+
+      const result = sut.findAll(params)
+      expect(result).rejects.toThrow(new Error())
+    })
   })
 })
