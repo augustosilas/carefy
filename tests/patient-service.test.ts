@@ -11,7 +11,13 @@ describe('PatientService', () => {
 
     }
     async findById(id: string): Promise<Patient | undefined> {
-      return undefined
+      return Promise.resolve({
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_last_name',
+        disease: 'any_disease',
+        birthDate: new Date(2022, 5, 3)
+      })
     }
     async delete(id: string): Promise<void> {
 
@@ -160,6 +166,22 @@ describe('PatientService', () => {
 
       const promise = sut.update(mockPatient as any)
       expect(promise).rejects.toEqual(new AppError('birthdate cannot be greater than the current date'))
+    })
+
+    test('should call patientRepository.findById with correct values', async () => {
+      const mockPatient = {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_last_name',
+        birthDate: new Date(2022, 5, 3),
+        disease: 'any_disease'
+      }
+
+      const { sut, patientRepositoryStub } = makeSut()
+      const findByIdSpy = jest.spyOn(patientRepositoryStub, 'findById')
+
+      await sut.update(mockPatient as any)
+      expect(findByIdSpy).toHaveBeenCalledWith('any_id')
     })
   })
 })
