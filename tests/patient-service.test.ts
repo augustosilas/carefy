@@ -146,5 +146,20 @@ describe('PatientService', () => {
       const promise = sut.update(mockPatient as any)
       expect(promise).rejects.toEqual(new AppError('missing field: id'))
     })
+
+    test('should throw if date of birth is greater than the current day', async () => {
+      const mockPatient = {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_last_name',
+        birthDate: new Date(2024, 5, 3),
+        disease: 'any_disease'
+      }
+
+      const { sut } = makeSut()
+
+      const promise = sut.update(mockPatient as any)
+      expect(promise).rejects.toEqual(new AppError('birthdate cannot be greater than the current date'))
+    })
   })
 })
