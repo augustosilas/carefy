@@ -60,5 +60,18 @@ describe('PatientService', () => {
       const promise = sut.create(mockPatient as any)
       await expect(promise).rejects.toEqual(new AppError('missing field: birthDate'))
     })
+
+    test('should throw if disease is not provided', async () => {
+      const mockPatient = {
+        name: 'any_name',
+        lastName: 'any_last_name',
+        birthDate: new Date(1995, 5, 3)
+      }
+
+      const patientRepositoryStub = new PatientRepositoryStub()
+      const sut = new PatientServices(patientRepositoryStub)
+      const promise = sut.create(mockPatient as any)
+      await expect(promise).rejects.toEqual(new AppError('missing field: disease'))
+    })
   })
 })
