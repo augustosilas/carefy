@@ -273,5 +273,16 @@ describe('PatientService', () => {
       await sut.delete(id)
       expect(deleteSpy).toHaveBeenCalledWith(id)
     })
+
+    test('should throw if PatientRepository throws', async () => {
+      const id = 'any_id'
+
+      const { sut, patientRepositoryStub } = makeSut()
+
+      jest.spyOn(patientRepositoryStub, 'findById').mockImplementation(() => { throw new Error() })
+
+      const result = sut.delete(id)
+      expect(result).rejects.toThrow(new Error())
+    })
   })
 })
