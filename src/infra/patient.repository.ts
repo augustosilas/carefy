@@ -1,5 +1,5 @@
 import { getRepository } from "typeorm";
-import { IPatientRepository, CreatePatient, Patient, UpdatePatient } from "./patient-repository.interface";
+import { IPatientRepository, CreatePatient, Patient, UpdatePatient, FindAllParams } from "./patient-repository.interface";
 import { PgPatient } from "./entities/patient-entity";
 
 export class PatientRepository implements IPatientRepository {
@@ -21,5 +21,14 @@ export class PatientRepository implements IPatientRepository {
 
   async delete(id: string): Promise<void> {
     await getRepository(PgPatient).delete(id)
+  }
+
+  async findAll({ page = 0, limit = 10 }: FindAllParams): Promise<Patient[] | []> {
+    return await getRepository(PgPatient)
+      .find({
+        take: limit,
+        skip: page,
+        order: { createdAt: 'DESC' }
+      })
   }
 }
