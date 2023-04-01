@@ -8,8 +8,9 @@ export class PatientServices implements IPatientServices {
   async create(patient: CreatePatient): Promise<void> {
     const requiredFields = ['name', 'lastName', 'birthDate', 'disease']
 
-    Object.keys(patient).forEach(key => {
-      if (!requiredFields.includes(key)) throw new AppError(`missing field: ${key}`)
+    requiredFields.forEach(requiredField => {
+      if (!Reflect.has(patient, requiredField))
+        throw new AppError(`missing field: ${requiredField}`)
     })
 
     if (patient.birthDate && new Date(patient.birthDate) > new Date()) {
