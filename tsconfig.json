@@ -5,8 +5,13 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": ".",
-    "forceConsistentCasingInFileNames": true
+    "rootDirs": [
+      "src"
+    ],
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
   }
 }
