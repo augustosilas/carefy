@@ -243,5 +243,15 @@ describe('PatientService', () => {
       const promise = sut.delete(id)
       await expect(promise).rejects.toEqual(new AppError('missing field: id'))
     })
+
+    test('should call patientRepository.findById with correct values', async () => {
+      const id = 'any_id'
+
+      const { sut, patientRepositoryStub } = makeSut()
+      const findByIdSpy = jest.spyOn(patientRepositoryStub, 'findById')
+
+      await sut.delete(id)
+      expect(findByIdSpy).toHaveBeenCalledWith('any_id')
+    })
   })
 })
