@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { PatientRepository } from '../infra/patient.repository'
 import { PatientServices } from '../services/patient-service'
+import { AppError } from '../app-error'
 
 export class PatientControllers {
   private patientServices: PatientServices
@@ -9,7 +10,7 @@ export class PatientControllers {
     this.patientServices = new PatientServices(new PatientRepository())
   }
 
-  public create = async (request: Request, response: Response): Promise<Response> => {
+  create = async (request: Request, response: Response): Promise<Response> => {
     try {
       const { name, lastName, disease, birthDate } = request.body
 
@@ -19,6 +20,24 @@ export class PatientControllers {
     } catch (error) {
       console.log(error)
       return response.status(400).json({ error })
+    }
+  }
+
+  update = async (request: Request, response: Response): Promise<Response> => {
+    try {
+      const id = request.params.id
+      const partialPatient = request.body
+
+      await this.patientServices.update({ id, ...partialPatient })
+
+      return response.status(200).send()
+    } catch (error) {
+      console.log(error)
+
+      if (error instanceof AppError)
+        return response.status(error.statusCode).json({ message: error.message })
+
+      return response.status(500).json({ message: 'internal server error' })
     }
   }
 }
