@@ -3,6 +3,27 @@ import { CreatePatient, FindAllParams, IPatientRepository, Patient, UpdatePatien
 import { PatientServices } from "../src/services/patient-service"
 
 describe('PatientService', () => {
+  const mockPatient = () => (
+    {
+      id: 'any_id',
+      name: 'any_name',
+      lastName: 'any_last_name',
+      disease: 'any_disease',
+      birthDate: new Date(2022, 5, 3)
+    })
+
+  const mockPatients = () => ([
+    mockPatient(),
+    mockPatient(),
+    mockPatient(),
+    mockPatient(),
+    mockPatient(),
+    mockPatient(),
+    mockPatient(),
+    mockPatient(),
+    mockPatient(),
+  ])
+
   class PatientRepositoryStub implements IPatientRepository {
     async create(patient: CreatePatient): Promise<void> {
 
@@ -23,7 +44,7 @@ describe('PatientService', () => {
 
     }
     async findAll(params: FindAllParams): Promise<Patient[] | []> {
-      return []
+      return mockPatients()
     }
   }
 
@@ -298,6 +319,18 @@ describe('PatientService', () => {
 
       await sut.findAll(params)
       expect(findAllSpy).toHaveBeenCalledWith(params)
+    })
+
+    test('should return patients on success', async () => {
+      const params = {
+        page: 0,
+        limit: 10
+      }
+
+      const { sut } = makeSut()
+
+      const result = await sut.findAll(params)
+      expect(result).toEqual(mockPatients())
     })
   })
 })
