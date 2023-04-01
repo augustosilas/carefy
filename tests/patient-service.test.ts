@@ -3,25 +3,36 @@ import { CreatePatient, FindAllParams, IPatientRepository, Patient, UpdatePatien
 import { PatientServices } from "../src/services/patient-service"
 
 describe('PatientService', () => {
+  class PatientRepositoryStub implements IPatientRepository {
+    async create(patient: CreatePatient): Promise<void> {
+
+    }
+    async update(patient: UpdatePatient): Promise<void> {
+
+    }
+    async findById(id: string): Promise<Patient | undefined> {
+      return undefined
+    }
+    async delete(id: string): Promise<void> {
+
+    }
+    async findAll(params: FindAllParams): Promise<Patient[] | []> {
+      return []
+    }
+  }
+
+  const makeSut = () => {
+    const patientRepositoryStub = new PatientRepositoryStub()
+    const sut = new PatientServices(patientRepositoryStub)
+
+    return {
+      sut,
+      patientRepositoryStub
+    }
+  }
+
 
   describe('CreatePatient', () => {
-    class PatientRepositoryStub implements IPatientRepository {
-      async create(patient: CreatePatient): Promise<void> {
-
-      }
-      async update(patient: UpdatePatient): Promise<void> {
-
-      }
-      async findById(id: string): Promise<Patient | undefined> {
-        return undefined
-      }
-      async delete(id: string): Promise<void> {
-
-      }
-      async findAll(params: FindAllParams): Promise<Patient[] | []> {
-        return []
-      }
-    }
     test('should throw if name is not provided', async () => {
       const mockPatientWithoutName = {
         lastName: 'any_last_name',
@@ -29,8 +40,8 @@ describe('PatientService', () => {
         disease: 'any_disease'
       }
 
-      const patientRepositoryStub = new PatientRepositoryStub()
-      const sut = new PatientServices(patientRepositoryStub)
+      const { sut } = makeSut()
+
       const promise = sut.create(mockPatientWithoutName as any)
       await expect(promise).rejects.toEqual(new AppError('missing field: name'))
     })
@@ -42,8 +53,8 @@ describe('PatientService', () => {
         disease: 'any_disease'
       }
 
-      const patientRepositoryStub = new PatientRepositoryStub()
-      const sut = new PatientServices(patientRepositoryStub)
+      const { sut } = makeSut()
+
       const promise = sut.create(mockPatient as any)
       await expect(promise).rejects.toEqual(new AppError('missing field: lastName'))
     })
@@ -55,8 +66,8 @@ describe('PatientService', () => {
         disease: 'any_disease'
       }
 
-      const patientRepositoryStub = new PatientRepositoryStub()
-      const sut = new PatientServices(patientRepositoryStub)
+      const { sut } = makeSut()
+
       const promise = sut.create(mockPatient as any)
       await expect(promise).rejects.toEqual(new AppError('missing field: birthDate'))
     })
@@ -68,8 +79,8 @@ describe('PatientService', () => {
         birthDate: new Date(1995, 5, 3)
       }
 
-      const patientRepositoryStub = new PatientRepositoryStub()
-      const sut = new PatientServices(patientRepositoryStub)
+      const { sut } = makeSut()
+
       const promise = sut.create(mockPatient as any)
       await expect(promise).rejects.toEqual(new AppError('missing field: disease'))
     })
@@ -82,8 +93,8 @@ describe('PatientService', () => {
         disease: 'any_disease'
       }
 
-      const patientRepositoryStub = new PatientRepositoryStub()
-      const sut = new PatientServices(patientRepositoryStub)
+      const { sut } = makeSut()
+
       const promise = sut.create(mockPatient)
       await expect(promise).rejects.toEqual(new AppError('birthdate cannot be greater than the current date'))
     })
@@ -96,8 +107,7 @@ describe('PatientService', () => {
         disease: 'any_disease'
       }
 
-      const patientRepositoryStub = new PatientRepositoryStub()
-      const sut = new PatientServices(patientRepositoryStub)
+      const { sut, patientRepositoryStub } = makeSut()
 
       const createSpy = jest.spyOn(patientRepositoryStub, 'create')
 
@@ -113,8 +123,7 @@ describe('PatientService', () => {
         disease: 'any_disease'
       }
 
-      const patientRepositoryStub = new PatientRepositoryStub()
-      const sut = new PatientServices(patientRepositoryStub)
+      const { sut, patientRepositoryStub } = makeSut()
 
       jest.spyOn(patientRepositoryStub, 'create').mockImplementation(() => { throw new Error() })
 
