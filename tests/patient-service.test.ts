@@ -233,4 +233,15 @@ describe('PatientService', () => {
       expect(result).rejects.toThrow(new Error())
     })
   })
+
+  describe('DeletePatient', () => {
+    test('should throw if id is not provided', async () => {
+      const id = ''
+
+      const { sut } = makeSut()
+
+      const promise = sut.delete(id)
+      await expect(promise).rejects.toEqual(new AppError('missing field: id'))
+    })
+  })
 })
