@@ -183,5 +183,21 @@ describe('PatientService', () => {
       await sut.update(mockPatient as any)
       expect(findByIdSpy).toHaveBeenCalledWith('any_id')
     })
+
+    test('should throw if patient is not found', async () => {
+      const mockPatient = {
+        id: 'invalid_id',
+        name: 'any_name',
+        lastName: 'any_last_name',
+        birthDate: new Date(2022, 5, 3),
+        disease: 'any_disease'
+      }
+
+      const { sut, patientRepositoryStub } = makeSut()
+      jest.spyOn(patientRepositoryStub, 'findById').mockReturnValue(Promise.resolve(undefined))
+
+      const promise = sut.update(mockPatient as any)
+      await expect(promise).rejects.toEqual(new AppError('patient not found', 404))
+    })
   })
 })
