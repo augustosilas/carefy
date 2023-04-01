@@ -9,7 +9,7 @@ export class PatientServices implements IPatientServices {
     const requiredFields = ['name', 'lastName', 'birthDate', 'disease']
 
     Object.keys(patient).forEach(key => {
-      if (!requiredFields.includes(key)) throw new Error(`missing field: ${key}`)
+      if (!requiredFields.includes(key)) throw new AppError(`missing field: ${key}`)
     })
 
     await this.patientRepository.create(patient)

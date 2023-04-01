@@ -19,7 +19,11 @@ export class PatientControllers {
       return response.status(201).send()
     } catch (error) {
       console.log(error)
-      return response.status(400).json({ error })
+
+      if (error instanceof AppError)
+        return response.status(error.statusCode).json({ message: error.message })
+
+      return response.status(500).json({ message: 'internal server error' })
     }
   }
 
