@@ -32,4 +32,13 @@ export class PatientServices implements IPatientServices {
     await this.patientRepository.update(patient)
   }
 
+  async delete(id: string): Promise<void> {
+    if (!id) throw new AppError('missing field: id')
+
+    const patient = await this.patientRepository.findById(id)
+    if (!patient) throw new AppError('patient not found', 404)
+
+    await this.patientRepository.delete(id)
+  }
+
 }

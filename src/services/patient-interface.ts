@@ -16,4 +16,5 @@ export type UpdatePatient = {
 export interface IPatientServices {
   create: (patient: Patient) => Promise<void>
   update: (patient: UpdatePatient) => Promise<void>
+  delete: (id: string) => Promise<void>
 }
