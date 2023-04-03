@@ -13,6 +13,7 @@ Requisitos obedecidos:
       - endpoint: PATCH - /patients/{{patientId}}
         body: name (opcional), lastName (opcional), birthDate (opcional) e disease (opcional)
  - Deploy
+ - Teste unitário dos casos de uso
  
 Requisitos não obedecidos:
  - Login com github (solicitei que me tirassem uma dúvida sobre isso, sem respostas)
